@@ -4,13 +4,18 @@ import android.Manifest
 import android.graphics.Color
 import android.location.Location
 import android.os.Build
+import android.app.Application
+import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.V
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import com.gitturami.bike.R
+import com.gitturami.bike.SettingActivity
 import com.gitturami.bike.view.main.presenter.MainContact
 import com.gitturami.bike.view.main.presenter.MainPresenter
 import com.skt.Tmap.TMapData
@@ -18,6 +23,7 @@ import com.skt.Tmap.TMapGpsManager
 import com.skt.Tmap.TMapPoint
 import com.skt.Tmap.TMapView
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(), MainContact.View, TMapGpsManager.onLocationChangedCallback {
     private lateinit var presenter: MainContact.Presenter
@@ -37,12 +43,21 @@ class MainActivity : AppCompatActivity(), MainContact.View, TMapGpsManager.onLoc
         presenter.test()
 
         setFloatingButtonAction()
+
+        initSettingButton()
     }
 
     override fun onLocationChange(location: Location) {
-        if(mTracking){
+        if(mTracking) {
             tMapView.setLocationPoint(location.longitude, location.latitude) // 마커이동
             tMapView.setCenterPoint(location.longitude, location.latitude)  // 중심이동
+        }
+    }
+
+    private fun initSettingButton() {
+        settingButton.setOnClickListener {
+            val intent = Intent(applicationContext, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 
